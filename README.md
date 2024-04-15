@@ -4,12 +4,11 @@ In conjunction with the PowerBI code, we utilized DAX code to create new measure
 
 The Power BI dashboard/reports can be viewed here https://github.com/danielheather/Power-BI-Sales-Dashboard
 
+The DAX code is available as txt as notepad++ is not DAX compatible
+
 ## DAX Code Design
 
 Examples of the Data Analysis Expression code is displayed below, grouped by its functionality. 
-* customers: Records customer information, for in customer segmentation and demographic analysis.
-* products: Catalogs product inventory, for tracking and analyzing product performance.
-* orders: For sales transactions, linking the products and customers, and includeing financial metrics.
 
 Average Calculations are used for ease of comparison between aspects of the data.
 ```
@@ -46,8 +45,8 @@ IF(
 )
 ```
 Conditional Logic,
-Ship cost by mode used to determine cost by shipping mode for greater depth of insight.
-Profit Percentage is used to better compare the profit rate between categories, ship modes. Better guides pricing strategies and cost management.
+* Ship cost by mode used to determine cost by shipping mode for greater depth of insight.
+* Profit Percentage is used to better compare the profit rate between categories, ship modes. Better guides pricing strategies and cost management.
 ```
 First_Class = IF(Orders[Ship Mode] = "First Class", Orders[Shipping Cost])
 
@@ -62,8 +61,8 @@ CALCULATE(
 )
 ```
 Ranking and Status
-Sales Rank by Customer,  Assigns a rank to each customer based on total sales, using a dense ranking method.
-Shipment Status: Evaluates, if shipments are 'Late' or 'On Time' based on predefined criteria for each shipping mode.
+* Sales Rank by Customer,  Assigns a rank to each customer based on total sales, using a dense ranking method.
+* Shipment Status: Evaluates, if shipments are 'Late' or 'On Time' based on predefined criteria for each shipping mode.
 ```
 Sales Rank by Customer = RANKX(
     ALL('Orders'[Customer ID]), 

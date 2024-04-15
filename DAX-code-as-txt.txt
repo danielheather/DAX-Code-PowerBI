@@ -1,0 +1,76 @@
+
+RAW DAX CODE
+
+
+Avg_FC_Cost.1 = 
+CALCULATE(
+    AVERAGE(Orders[Shipping Cost]),
+    FILTER(
+        Orders,
+        Orders[Ship Mode]= "First Class"))
+
+
+
+Average Return Rate = AVERAGEX(
+    ALL('Orders'[Ship Mode]), 
+    [Return Rate by Ship Mode]
+
+
+
+Customer Segmented by Rank = 
+VAR CustomerRank = [Sales Rank by Customer]
+VAR TotalCustomers = DISTINCTCOUNT('Orders'[Customer ID])
+VAR Percentile20 = TotalCustomers * 0.2
+VAR Percentile50 = TotalCustomers * 0.5
+RETURN
+IF(
+    CustomerRank <= Percentile20, "Big Spenders",
+    IF(
+        CustomerRank > Percentile20 && CustomerRank <= Percentile50, "Moderate Spenders",
+        "Occasional Purchasers"
+    )
+)
+
+
+
+First_Class = IF(Orders[Ship Mode] = "First Class", Orders[Shipping Cost])
+
+Profit Percentage = SUM(Orders[Profit]) / SUM(Orders[Sales]) 
+
+
+
+Return Rate by Ship Mode = 
+CALCULATE(
+    [Return Rate],
+    ALLEXCEPT('Orders', 'Orders'[Ship Mode])
+)
+
+
+
+Sales Rank by Customer = RANKX(
+    ALL('Orders'[Customer ID]), 
+    [Total Sales by Customer], 
+    , 
+    DESC, 
+    DENSE
+)
+
+
+Shipment Status = 
+SWITCH(TRUE(),
+    Orders[Ship Mode] = "Same Day" && Orders[Shipping Time] > 1, "Late",
+    Orders[Ship Mode] = "First Class" && Orders[Shipping Time] > 2, "Late",
+    Orders[Ship Mode] = "Second Class" && Orders[Shipping Time] > 4, "Late",
+    Orders[Ship Mode] = "Standard Class" && Orders[Shipping Time] > 6, "Late", 
+    "On Time"
+    )
+
+
+
+Shipping Time = DATEDIFF(Orders[Order Date], Orders[Ship Date], DAY)
+
+
+Total Sales by Customer = CALCULATE(SUM('Orders'[Sales]), ALLEXCEPT('Orders', 'Orders'[Customer ID]))
+
+
+Standard_Class = IF(Orders[Ship Mode] = "Standard Class", Orders[Shipping Cost])
